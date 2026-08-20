@@ -1,0 +1,34 @@
+# powershell 5.1 脚本运行
+
+function Skip-CopyFile {
+    param(
+        [string]$src,
+        [string]$dst,
+        [int]$skipBytes
+    )
+    $fsIn = [System.IO.File]::OpenRead($src)
+    $fsOut = [System.IO.File]::Create($dst)
+    try {
+        $fsIn.Seek($skipBytes, [System.IO.SeekOrigin]::Begin)
+        $buf = New-Object byte[] 1MB
+        while( $n = $fsIn.Read($buf,0,$buf.Length) ){
+            $fsOut.Write($buf,0,$n)
+        }
+    }finally{
+        $fsIn.Close()
+        $fsOut.Close()
+    }
+}
+
+# ----------------------（Replace）替换绝对路径----------------------
+
+$srcVideo = "C:\Users\pip\Videos\bilibili\49918125\49918125_da2-1-30064.m4s"
+$dstVideo = "C:\Users\pip\Videos\bilibili\49918125\video_fixed.m4s"
+$srcAudio = "C:\Users\pip\Videos\bilibili\49918125\49918125_da2-1-30280.m4s"
+$dstAudio = "C:\Users\pip\Videos\bilibili\49918125\audio_fixed.m4s"
+
+#跳过前9字节
+
+Skip-CopyFile -src $srcVideo -dst $dstVideo -skipBytes 9
+Skip-CopyFile -src $srcAudio -dst $dstAudio -skipBytes 9
+Write-Host "✅头部切除完成，已生成 video_fixed.m4s audio_fixed.m4s"

@@ -1,0 +1,1 @@
+ffmpeg -i "C:\Users\pip\Videos\bilibili\49918125\video_fixed.m4s" -i "C:\Users\pip\Videos\bilibili\49918125\audio_fixed.m4s" -c copy "C:\Users\邹波\Videos\bilibili\49918125\out.mp4" -y
